@@ -5,7 +5,7 @@ class Protocol {
   // YAHAN CHANGE KIYA HAI (ws:// ki jagah wss:// aur naya address)
   static const defaultRelayUrl = 'wss://vanish-relay-sawaira.bonto.page/ws';
   static const lifetimeMs = 30000;
-  static const relayEchoesToSender = true;
+  static const relayEchoesToSender = false;
 
   static String join(String name, String deviceId) =>
       jsonEncode({'type': 'join', 'name': name, 'device_id': deviceId});
