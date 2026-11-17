@@ -27,6 +27,7 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
 
   RelayClient? _client;
   Timer? _ticker;
+  Timer? _pingTimer; // Naya: Heartbeat ke liye
   bool _started = false;
   final Set<String> _sentThisConn = {};
 
@@ -79,6 +80,12 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
     _started = true;
     WidgetsBinding.instance.addObserver(this);
     _ticker = Timer.periodic(const Duration(milliseconds: 250), (_) => _tick());
+
+    // Naya: Har 15 second baad ping bhejna
+    _pingTimer = Timer.periodic(const Duration(seconds: 15), (_) {
+      _client?.send(Protocol.ping());
+    });
+
     _client = RelayClient(
       url: relayUrl,
       onStatus: (s) {
@@ -94,6 +101,8 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
   void _stop() {
     _ticker?.cancel();
     _ticker = null;
+    _pingTimer?.cancel();
+    _pingTimer = null;
     _client?.close();
     _client = null;
     _started = false;
@@ -121,12 +130,6 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
       if (_sentThisConn.contains(m.id)) continue;
       if (!(_client?.send(Protocol.outgoing(m)) ?? false)) break;
       _sentThisConn.add(m.id);
-      if (!Protocol.relayEchoesToSender) {
-        final now = serverNowMs;
-        queue.removeWhere((q) => q.id == m.id);
-        _accept(m.copyWith(
-            sentAt: now, expiresAt: now + Protocol.lifetimeMs, mine: true));
-      }
     }
   }
 
@@ -138,7 +141,17 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
 
   void _onData(String raw) {
     final ev = Protocol.parse(raw);
-    if (ev is IncomingExpired) {
+
+    if (ev is IncomingWelcome) {
+      // Protocol ke mutabiq: offset = server_time - phone_time
+      offsetMs = ev.serverTime - DateTime.now().millisecondsSinceEpoch;
+      _persist();
+      notifyListeners();
+    } else if (ev is IncomingPong) {
+      // Ping ka jawab mil gaya, kuch karne ki zaroorat nahi
+    } else if (ev is IncomingDelivered) {
+      // Message deliver ho gaya (is par tick lagana ho toh laga sakte hain)
+    } else if (ev is IncomingExpired) {
       messages.removeWhere((m) => m.id == ev.id);
       _seen[ev.id] = serverNowMs;
       _persist();
@@ -146,8 +159,9 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
     } else if (ev is IncomingMessage) {
       final m = ev.message;
       if (m.expiresAt == null || m.sentAt == null) return;
-      if (_seen.containsKey(m.id)) return;
-      _learnOffset(m.sentAt!);
+      if (_seen.containsKey(m.id)) return; // Duplicate ignore
+
+      // Ab offset Welcome message se set ho raha hai
 
       final qi = queue.indexWhere((q) => q.id == m.id);
       final isMine = qi >= 0 || m.sender == name;
@@ -160,7 +174,7 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
         return;
       }
       _accept(m.copyWith(mine: isMine));
-      if (!isMine) _client?.send(Protocol.delivered(m.id));
+      // Protocol ke mutabiq app "delivered" nahi bhejti, relay bhejta hai.
     }
   }
 
@@ -170,12 +184,6 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
     messages.sort((a, b) => (a.sentAt ?? 0).compareTo(b.sentAt ?? 0));
     _persist();
     notifyListeners();
-  }
-
-  void _learnOffset(int sentAt) {
-    _samples.add(sentAt - DateTime.now().millisecondsSinceEpoch);
-    if (_samples.length > 5) _samples.removeAt(0);
-    offsetMs = _samples.reduce(max);
   }
 
   void _tick() {
