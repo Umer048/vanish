@@ -22,23 +22,33 @@ class Protocol {
       if (j is! Map<String, dynamic>) return null;
       final type = j['type'];
 
-      // Naya: Welcome message (Clock set karne ke liye)
+      // Welcome message (Clock set karne ke liye)
       if (type == 'welcome' && j['server_time'] is num) {
         return IncomingWelcome((j['server_time'] as num).toInt());
       }
 
-      // Naya: Pong response
+      // Presence (Online users ka count)
+      if (type == 'presence' && j['count'] is num) {
+        return IncomingPresence(
+          (j['count'] as num).toInt(),
+          (j['members'] as List? ?? const []).map((e) => e.toString()).toList(),
+        );
+      }
+
+      // Pong response
       if (type == 'pong') return IncomingPong();
 
-      // Naya: Delivered response (Relay bhejta hai)
+      // Delivered response
       if (type == 'delivered' && j['id'] is String) {
         return IncomingDelivered(j['id'] as String);
       }
 
+      // Expired message
       if (type == 'expired' && j['id'] is String) {
         return IncomingExpired(j['id'] as String);
       }
 
+      // Naya Chat Message
       if (type == 'message' && j['id'] is String && j['text'] is String) {
         return IncomingMessage(ChatMessage(
           id: j['id'] as String,
@@ -81,4 +91,9 @@ class IncomingPong extends Incoming {}
 class IncomingDelivered extends Incoming {
   IncomingDelivered(this.id);
   final String id;
+}
+class IncomingPresence extends Incoming {
+  IncomingPresence(this.count, this.members);
+  final int count;
+  final List<String> members;
 }

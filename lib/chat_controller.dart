@@ -18,16 +18,17 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
   String relayUrl = Protocol.defaultRelayUrl;
   ConnStatus status = ConnStatus.disconnected;
 
+  int onlineCount = 1;
+
   final List<ChatMessage> messages = [];
   final List<ChatMessage> queue = [];
   final Map<String, int> _seen = {};
 
   int offsetMs = 0;
-  final List<int> _samples = [];
 
   RelayClient? _client;
   Timer? _ticker;
-  Timer? _pingTimer; // Naya: Heartbeat ke liye
+  Timer? _pingTimer;
   bool _started = false;
   final Set<String> _sentThisConn = {};
 
@@ -81,7 +82,6 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _ticker = Timer.periodic(const Duration(milliseconds: 250), (_) => _tick());
 
-    // Naya: Har 15 second baad ping bhejna
     _pingTimer = Timer.periodic(const Duration(seconds: 15), (_) {
       _client?.send(Protocol.ping());
     });
@@ -143,14 +143,16 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
     final ev = Protocol.parse(raw);
 
     if (ev is IncomingWelcome) {
-      // Protocol ke mutabiq: offset = server_time - phone_time
       offsetMs = ev.serverTime - DateTime.now().millisecondsSinceEpoch;
       _persist();
       notifyListeners();
+    } else if (ev is IncomingPresence) {
+      onlineCount = ev.count;
+      notifyListeners();
     } else if (ev is IncomingPong) {
-      // Ping ka jawab mil gaya, kuch karne ki zaroorat nahi
+      // Heartbeat ok
     } else if (ev is IncomingDelivered) {
-      // Message deliver ho gaya (is par tick lagana ho toh laga sakte hain)
+      // Message delivered
     } else if (ev is IncomingExpired) {
       messages.removeWhere((m) => m.id == ev.id);
       _seen[ev.id] = serverNowMs;
@@ -159,9 +161,7 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
     } else if (ev is IncomingMessage) {
       final m = ev.message;
       if (m.expiresAt == null || m.sentAt == null) return;
-      if (_seen.containsKey(m.id)) return; // Duplicate ignore
-
-      // Ab offset Welcome message se set ho raha hai
+      if (_seen.containsKey(m.id)) return;
 
       final qi = queue.indexWhere((q) => q.id == m.id);
       final isMine = qi >= 0 || m.sender == name;
@@ -174,7 +174,6 @@ class ChatController extends ChangeNotifier with WidgetsBindingObserver {
         return;
       }
       _accept(m.copyWith(mine: isMine));
-      // Protocol ke mutabiq app "delivered" nahi bhejti, relay bhejta hai.
     }
   }
 

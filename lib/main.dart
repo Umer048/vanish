@@ -207,7 +207,7 @@ class _JoinScreenState extends State<JoinScreen> {
                         keyboardType: TextInputType.url,
                         decoration: const InputDecoration(
                           labelText: 'Relay WebSocket URL',
-                          hintText: 'ws://192.168.1.20:8080/ws',
+                          hintText: 'wss://vanish-relay-sawaira.bonto.page/ws',
                           prefixIcon: Icon(Icons.link),
                         ),
                       ),
@@ -394,6 +394,15 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             const SizedBox(width: 10),
             _StatusPill(status: widget.c.status),
+            const SizedBox(width: 8),
+            Text(
+              '(${widget.c.onlineCount} online)',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.5),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
         actions: [
@@ -646,7 +655,6 @@ class _MessageBubble extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.7),
                       fontSize: 11,
-                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
                 ],
