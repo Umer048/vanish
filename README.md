@@ -1,17 +1,32 @@
-# vanish
+# Vanish Class Network - Flutter App
 
-A new Flutter project.
+## What is this?
+Vanish is a mobile chat application where messages disappear exactly 30 seconds after they are delivered. This app connects to the shared class relay server to communicate with all other students' apps.
 
-## Getting Started
+## Platform Used
+- **Framework:** Flutter (Dart)
+- **Target Device:** Android (Tested on Android 16 / POCO C75)
+- **Storage:** Local JSON file (`vanish_state.json`) for offline queue and state persistence.
 
-This project is a starting point for a Flutter application.
+## Relay Address
+The app connects to the official class relay:
+`wss://vanish-relay-sawaira.bonto.page/ws`
 
-A few resources to get you started if this is your first Flutter project:
+## How to Build and Run
+1. Clone the repository: `git clone https://github.com/Umer048/vanish.git`
+2. Open the project in Android Studio.
+3. Ensure the Flutter SDK is installed.
+4. Connect an Android device or start an emulator.
+5. Run `flutter pub get` in the terminal.
+6. Press the **Run** button (or execute `flutter run`).
+7. Enter your display name and click "Enter Vanish".
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Academic Integrity & AI Disclosure
+- **AI Tools:** I used AI assistance for code refactoring, fixing Flutter deprecations (`withOpacity`), and understanding the WebSocket protocol structure. However, I understand every line of the submitted code.
+- **Class Work:** The protocol document (`PROTOCOL.md`) was provided by Sawaira Waheed and agreed upon by the class.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features Implemented
+- Protocol v1 integration (Join, Welcome, Message, Expired, Ping/Pong, Presence).
+- Precise countdown timer based on server time (handles clock skew).
+- Offline message queue (messages are saved locally and sent when reconnected).
+- Real deletion of messages from local storage.
