@@ -4,7 +4,7 @@
   <img src="https://github.com/user-attachments/assets/544a6c8c-9884-4e74-9f6f-18a812c2dd96" width="250" />
 </div>
 <br><br>
-# Vanish Class Network - Flutter App
+## Vanish Class Network - Flutter App
 
 ## What is this?
 Vanish is a mobile chat application where messages disappear exactly 30 seconds after they are delivered. This app connects to the shared class relay server to communicate with all other students' apps.
