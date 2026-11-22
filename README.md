@@ -14,11 +14,9 @@ Built for *Assignment 3, Mobile Application Development* by **Muqaddas Fatima**.
 
 <br/>
 
-<img src="https://github.com/user-attachments/assets/3be84199-a09c-4db0-b07b-4741b35530ae" width="250" />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://github.com/user-attachments/assets/544a6c8c-9884-4e74-9f6f-18a812c2dd96" width="250" />
+<img src="showcase.png" alt="Vanish in action: real screenshots" width="100%" />
 
-<sub>Left: online with 3 people connected. Right: the class chatting, each message with its own timer.</sub>
+<sub>Real screenshots: online count, class chat with a timer on every message, and the offline queue.</sub>
 
 </div>
 
@@ -63,21 +61,32 @@ Vanish is a mobile chat app for one shared class room. All apps connect to **one
 My phone never talks to other phones directly. Every phone talks to the class relay, which shares each message with everyone and deletes it after 30 seconds.
 
 <div align="center">
-  <img src="how-it-works.png" alt="Everyone talks through one shared server" width="90%" />
+  <img src="how-it-works.png" alt="Everyone talks through one shared server" width="100%" />
 </div>
 
 Inside the app, the screens never touch the network or the disk. They ask the controller, which uses the protocol and storage helpers.
 
 <div align="center">
-  <img src="architecture.png" alt="App architecture" width="90%" />
+  <img src="architecture.png" alt="App architecture" width="100%" />
 </div>
 
 ---
 
 ## Features
 
+<div align="center">
+  <img src="features.png" alt="What Vanish can do" width="100%" />
+</div>
+
+<details>
+<summary><b>Full feature list</b></summary>
+
 | Feature | What it does |
-|---|---|
+|
+
+</details>
+
+---|---|
 | **Join with a name** | Type a display name (up to 30 characters) and press *Enter Vanish*. |
 | **30-second timer** | Each message shows a shrinking bar and the seconds left. |
 | **Connection status** | Green *online*, yellow *connecting*, red *offline*. |
@@ -93,35 +102,16 @@ Inside the app, the screens never touch the network or the disk. They ask the co
 
 ## The chat screen
 
-<table>
-<tr>
-<td width="34%" align="center" valign="top">
-  <img src="chat-screen-explained.png" alt="Annotated chat screen" width="220" />
-</td>
-<td valign="top">
-
-| # | Element | Meaning |
-|---|---|---|
-| 1 | Connection pill | online, connecting or offline |
-| 2 | Online count | how many apps are connected |
-| 3 | Settings (⚙) | change relay address and reconnect |
-| 4 | My message | purple bubble with my name |
-| 5 | Countdown bar | gets shorter, seconds shown at right |
-| 6 | Message box | says *vanishes in 30s* |
-| 7 | Send button | sends now, or queues if offline |
-
-<sub>Some classmates' message text is blurred for privacy.</sub>
-
-</td>
-</tr>
-</table>
+<div align="center">
+  <img src="chat-screen-explained.png" alt="The chat screen, explained" width="80%" />
+</div>
 
 ---
 
 ## Message lifecycle
 
 <div align="center">
-  <img src="lifecycle.png" alt="Message lifecycle" width="95%" />
+  <img src="lifecycle.png" alt="Message lifecycle" width="100%" />
 </div>
 
 **Who decides when a message expires?** The relay. It stamps each message with `sent_at` and `expires_at` (`sent_at + 30000`). Neither the sender nor the receiving phone decides, so nobody can keep a message alive longer.
@@ -140,7 +130,7 @@ remaining = (expires_at - offset) - phone_time
 The app stores `expires_at`, not "seconds left", so the timer is still correct after the app is backgrounded, rotated or restarted.
 
 <div align="center">
-  <img src="countdown.png" alt="Clock offset example" width="95%" />
+  <img src="countdown.png" alt="Clock offset example" width="100%" />
 </div>
 
 ---
@@ -150,7 +140,7 @@ The app stores `expires_at`, not "seconds left", so the timer is still correct a
 A message written offline waits in the queue. If more than 30 seconds pass before it can be sent, it is **dropped and never sent**. If the network returns in time, it is sent exactly once and gets a fresh 30-second timer from the relay.
 
 <div align="center">
-  <img src="no-internet.png" alt="Offline timeline" width="90%" />
+  <img src="no-internet.png" alt="Offline timeline" width="100%" />
 </div>
 
 ---
@@ -199,7 +189,7 @@ vanish/
 │   ├── protocol.dart          # JSON frames, relay URL, 30 s lifetime
 │   ├── store.dart             # reads/writes vanish_state.json
 │   └── models.dart            # message model
-├── banner.png, lifecycle.png, ...  # images used in this README
+├── *.png                  # images used in this README (banner, showcase, diagrams)
 ├── PROTOCOL.md                # shared class protocol v1
 └── pubspec.yaml
 ```
@@ -237,7 +227,7 @@ flutter build apk --release # make an installable APK
 "Messages vanish in 30 seconds" is only enforced by apps that follow the protocol. Once text leaves the sender's phone, no app can control what happens to it.
 
 <div align="center">
-  <img src="cannot-control.png" alt="What Vanish cannot control" width="90%" />
+  <img src="cannot-control.png" alt="What Vanish cannot control" width="100%" />
 </div>
 
 - **Screenshots** and **copying the words** cannot be blocked.
