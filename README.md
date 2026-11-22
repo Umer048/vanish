@@ -78,28 +78,6 @@ Inside the app, the screens never touch the network or the disk. They ask the co
   <img src="features.png" alt="What Vanish can do" width="100%" />
 </div>
 
-<details>
-<summary><b>Full feature list</b></summary>
-
-| Feature | What it does |
-|
-
-</details>
-
----|---|
-| **Join with a name** | Type a display name (up to 30 characters) and press *Enter Vanish*. |
-| **30-second timer** | Each message shows a shrinking bar and the seconds left. |
-| **Connection status** | Green *online*, yellow *connecting*, red *offline*. |
-| **Online count** | The top bar shows how many people are connected, for example `(3 online)`. |
-| **Offline queue** | Messages written offline show *waiting to send…* and are sent once when the network returns. |
-| **No duplicates** | Every message has a unique ID. A repeated ID is ignored. |
-| **Real deletion** | Expired messages are removed from storage, not just hidden. |
-| **Heartbeat and reconnect** | Ping every 15 s. Reconnect after 1, 2, 4, then 8 seconds. |
-| **Name on every bubble** | Your own name also appears on your messages. |
-| **Relay settings** | The gear icon lets you change the relay address without reinstalling. |
-
----
-
 ## The chat screen
 
 <div align="center">
