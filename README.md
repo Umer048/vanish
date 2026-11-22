@@ -145,17 +145,6 @@ sequenceDiagram
     R-->>A: pong
 ```
 
-| Event | Direction | What the app does |
-|---|---|---|
-| `join` / `welcome` | app to relay and back | Sends name, saves the clock offset |
-| `message` | app to relay | Sends text (1 to 500 characters) |
-| `message` (echo) | relay to all apps | Shows the bubble, starts the countdown |
-| `delivered` | relay to sender | Notes how many apps received it |
-| `expired` | relay to all apps | Deletes the message from screen and file |
-| `ping` / `pong` | both ways | Ping every 15 s, reconnect if no pong for 30 s |
-| `error` | relay to app | Handles codes such as `bad_name`, `bad_message` |
-
----
 
 ## Project structure
 
