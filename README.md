@@ -240,7 +240,7 @@ flutter build apk --release # make an installable APK
 
 ## Academic integrity and AI disclosure
 
-- **AI tools:** I used AI assistance for code refactoring, fixing Flutter deprecations (`withOpacity`), and understanding the WebSocket protocol. I understand every line of the submitted code.
+- **AI tools:** I used AI assistance for code , fixing Flutter deprecations (`withOpacity`), and understanding the WebSocket protocol.
 - **Class work:** the protocol document (`PROTOCOL.md`) was proposed by Sawaira Waheed and agreed by the class. I did not change the protocol myself.
 
 ---
