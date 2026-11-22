@@ -1,5 +1,9 @@
-<img src="https://github.com/user-attachments/assets/3be84199-a09c-4db0-b07b-4741b35530ae" width="250" />
-<img src="https://github.com/user-attachments/assets/544a6c8c-9884-4e74-9f6f-18a812c2dd96" width="250" />
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/3be84199-a09c-4db0-b07b-4741b35530ae" width="250" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/544a6c8c-9884-4e74-9f6f-18a812c2dd96" width="250" />
+</div>
+<br><br>
 # Vanish Class Network - Flutter App
 
 ## What is this?
