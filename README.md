@@ -212,6 +212,3 @@ flutter build apk --release # make an installable APK
 
 ---
 
-<div align="center">
-  <sub>Made by <b>Muqaddas Fatima</b> · Mobile Application Development · CS 5th Semester</sub>
-</div>
