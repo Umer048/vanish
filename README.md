@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/banner.png" alt="Vanish: messages that disappear 30 seconds after delivery" width="100%" />
+<img src="banner.png" alt="Vanish: messages that disappear 30 seconds after delivery" width="100%" />
 
 <br/>
 
@@ -63,13 +63,13 @@ Vanish is a mobile chat app for one shared class room. All apps connect to **one
 My phone never talks to other phones directly. Every phone talks to the class relay, which shares each message with everyone and deletes it after 30 seconds.
 
 <div align="center">
-  <img src="docs/how-it-works.png" alt="Everyone talks through one shared server" width="90%" />
+  <img src="how-it-works.png" alt="Everyone talks through one shared server" width="90%" />
 </div>
 
 Inside the app, the screens never touch the network or the disk. They ask the controller, which uses the protocol and storage helpers.
 
 <div align="center">
-  <img src="docs/architecture.png" alt="App architecture" width="90%" />
+  <img src="architecture.png" alt="App architecture" width="90%" />
 </div>
 
 ---
@@ -96,7 +96,7 @@ Inside the app, the screens never touch the network or the disk. They ask the co
 <table>
 <tr>
 <td width="34%" align="center" valign="top">
-  <img src="docs/chat-screen-explained.png" alt="Annotated chat screen" width="220" />
+  <img src="chat-screen-explained.png" alt="Annotated chat screen" width="220" />
 </td>
 <td valign="top">
 
@@ -121,7 +121,7 @@ Inside the app, the screens never touch the network or the disk. They ask the co
 ## Message lifecycle
 
 <div align="center">
-  <img src="docs/lifecycle.png" alt="Message lifecycle" width="95%" />
+  <img src="lifecycle.png" alt="Message lifecycle" width="95%" />
 </div>
 
 **Who decides when a message expires?** The relay. It stamps each message with `sent_at` and `expires_at` (`sent_at + 30000`). Neither the sender nor the receiving phone decides, so nobody can keep a message alive longer.
@@ -140,7 +140,7 @@ remaining = (expires_at - offset) - phone_time
 The app stores `expires_at`, not "seconds left", so the timer is still correct after the app is backgrounded, rotated or restarted.
 
 <div align="center">
-  <img src="docs/countdown.png" alt="Clock offset example" width="95%" />
+  <img src="countdown.png" alt="Clock offset example" width="95%" />
 </div>
 
 ---
@@ -150,7 +150,7 @@ The app stores `expires_at`, not "seconds left", so the timer is still correct a
 A message written offline waits in the queue. If more than 30 seconds pass before it can be sent, it is **dropped and never sent**. If the network returns in time, it is sent exactly once and gets a fresh 30-second timer from the relay.
 
 <div align="center">
-  <img src="docs/no-internet.png" alt="Offline timeline" width="90%" />
+  <img src="no-internet.png" alt="Offline timeline" width="90%" />
 </div>
 
 ---
@@ -199,7 +199,7 @@ vanish/
 │   ├── protocol.dart          # JSON frames, relay URL, 30 s lifetime
 │   ├── store.dart             # reads/writes vanish_state.json
 │   └── models.dart            # message model
-├── docs/                      # images used in this README
+├── banner.png, lifecycle.png, ...  # images used in this README
 ├── PROTOCOL.md                # shared class protocol v1
 └── pubspec.yaml
 ```
@@ -237,7 +237,7 @@ flutter build apk --release # make an installable APK
 "Messages vanish in 30 seconds" is only enforced by apps that follow the protocol. Once text leaves the sender's phone, no app can control what happens to it.
 
 <div align="center">
-  <img src="docs/cannot-control.png" alt="What Vanish cannot control" width="90%" />
+  <img src="cannot-control.png" alt="What Vanish cannot control" width="90%" />
 </div>
 
 - **Screenshots** and **copying the words** cannot be blocked.
